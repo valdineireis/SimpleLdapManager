@@ -17,13 +17,6 @@ import javax.naming.directory.SearchResult;
 public class LdapUser {
 	
 	private String objectClass;
-
-	public String getObjectClass() {
-		return objectClass;
-	}
-	public void setObjectClass(String objectClass) {
-		this.objectClass = objectClass;
-	}
 	
 	private String cn;
 	private String sAMAccountName;
@@ -34,10 +27,12 @@ public class LdapUser {
 	private String mail;
 	private String userPrincipalName;
 	private String displayName;
+	
 	/**
 	 * Title of the organization
 	 */
 	private String title;
+	
 	private String department;
 	private String company;
 	private String description;
@@ -48,23 +43,29 @@ public class LdapUser {
 	private String memberOf;
 	private String streetAddress;
 	private String postOfficeBox;
+	
 	/**
 	 * City
 	 */
 	private String l;
+	
 	/**
 	 * State
 	 */
 	private String st;
+	
 	private String postalCode;
+	
 	/**
 	 * Country
 	 */
 	private String co;
+	
 	/**
 	 * Country 2 Digit Code
 	 */
 	private String c;
+	
 	private String countryCode;
 	private String wWWHomePage;
 
@@ -181,6 +182,13 @@ public class LdapUser {
 			return true;
 		
 		return false;
+	}
+	
+	public String getObjectClass() {
+		return objectClass;
+	}
+	public void setObjectClass(String objectClass) {
+		this.objectClass = objectClass;
 	}
 	
 	public String getCn() {
