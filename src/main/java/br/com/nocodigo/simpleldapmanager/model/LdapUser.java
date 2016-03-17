@@ -17,6 +17,7 @@ import javax.naming.directory.SearchResult;
 public class LdapUser {
 	
 	private String objectClass;
+	private String distinguishedname;
 	
 	private String cn;
 	private String sAMAccountName;
@@ -190,7 +191,13 @@ public class LdapUser {
 	public void setObjectClass(String objectClass) {
 		this.objectClass = objectClass;
 	}
-	
+	public String getDistinguishedname() {
+		return distinguishedname;
+	}
+	public void setDistinguishedname(String distinguishedname) {
+		this.distinguishedname = distinguishedname;
+	}
+
 	public String getCn() {
 		return cn;
 	}

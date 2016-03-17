@@ -12,6 +12,7 @@ import br.com.nocodigo.simpleldapmanager.Manager;
 import br.com.nocodigo.simpleldapmanager.Select;
 import br.com.nocodigo.simpleldapmanager.action.AuthenticationAction;
 import br.com.nocodigo.simpleldapmanager.action.ConnectionAction;
+import br.com.nocodigo.simpleldapmanager.action.ResetPasswordAction;
 import br.com.nocodigo.simpleldapmanager.action.SelectAction;
 import br.com.nocodigo.simpleldapmanager.exception.JavaHomePathException;
 import br.com.nocodigo.simpleldapmanager.model.ConnectionModel;
@@ -28,10 +29,10 @@ public class LdapManager implements Manager {
 
 	private static final ResourceBundle CONFIG = ResourceBundle.getBundle("ldap");
 	
-	private Connection ldapConnection;
+	private ConnectionModel model;
 	
 	public LdapManager() {
-		ldapConnection = new ConnectionAction();
+		this.model = createModel();
 	}
 	
 	@Override
@@ -50,36 +51,47 @@ public class LdapManager implements Manager {
 	
 	@Override
 	public DirContext createConnection() throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
-		ldapConnection.execute(createModel());
-		return ldapConnection.getDirContext();
+		Connection connection = new ConnectionAction();
+		connection.execute(createModel());
+		return connection.getDirContext();
 	}
 	
 	@Override
 	public void verifyCredentials(String login, String password) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
-		ConnectionModel model = createModel();
-		model.setCn(login);
-		model.setPassword(password);
+		ConnectionModel connectionModel = createModel();
+		connectionModel.setCn(login);
+		connectionModel.setPassword(password);
 		
-		Connection ldapAuthenticate = new AuthenticationAction();
-		ldapAuthenticate.execute(model);
+		Connection connection = new AuthenticationAction();
+		connection.execute(connectionModel);
+		connection.close();
 	}
 
 	@Override
 	public ListUsers selectAllByOu(String ou) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
-		ConnectionModel model = createModel();
-		Select select = new SelectAction(ldapConnection, model);
+		Connection connection = new ConnectionAction();
+		Select select = new SelectAction(connection, this.model);
 		ListUsers users = select.allByOu(ou);
-		
+		connection.close();
 		return users;
 	}
 
 	@Override
 	public LdapUser selectByAccountName(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
-		ConnectionModel model = createModel();
-		Select select = new SelectAction(ldapConnection, model);
+		Connection connection = new ConnectionAction();
+		Select select = new SelectAction(connection, this.model);
 		LdapUser user = select.byAccountName(accountName);
-		
+		connection.close();
 		return user;
+	}
+	
+	@Override
+	public void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
+		verifyCredentials(accountName, password);
+		LdapUser user = selectByAccountName(accountName);
+		Connection connection = new ResetPasswordAction(newPassword, user.getDistinguishedname());
+		connection.execute(this.model);
+		connection.close();
 	}
 	
 }

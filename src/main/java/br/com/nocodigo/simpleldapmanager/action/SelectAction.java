@@ -24,14 +24,14 @@ import br.com.nocodigo.simpleldapmanager.model.ListUsers;
  */
 public class SelectAction implements Select {
 
-	private Connection ldapConnection;
+	private Connection connection;
 	private ConnectionModel model;
 	
 	public SelectAction(Connection connection, ConnectionModel model)
 			throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
 		this.model = model;
-		this.ldapConnection = connection;
-		this.ldapConnection.execute(model);
+		this.connection = connection;
+		this.connection.execute(model);
 	}
 	
 	private SearchResult findAccountByAccountName(String ldapSearchBaseDn, String accountName)
@@ -42,7 +42,7 @@ public class SelectAction implements Select {
 		SearchControls searchControls = new SearchControls();
 		searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 
-		NamingEnumeration<SearchResult> results = ldapConnection.getDirContext().search(ldapSearchBaseDn, searchFilter, searchControls);
+		NamingEnumeration<SearchResult> results = connection.getDirContext().search(ldapSearchBaseDn, searchFilter, searchControls);
 
 		SearchResult searchResult = null;
 		if (results.hasMoreElements()) {
@@ -78,8 +78,6 @@ public class SelectAction implements Select {
 			
 		} catch (Exception exception) {
 			exception.printStackTrace();
-		} finally {
-			ldapConnection.close();
 		}
 		
 		return user;
@@ -93,7 +91,7 @@ public class SelectAction implements Select {
 			SearchControls searchControls = new SearchControls();
 			searchControls.setSearchScope(SearchControls.SUBTREE_SCOPE);
 			
-			NamingEnumeration<SearchResult> results = ldapConnection.getDirContext()
+			NamingEnumeration<SearchResult> results = connection.getDirContext()
 					.search(Util.createString("%s,%s", ou, model.getBaseDn()), null);
 			
 			while (results.hasMore()) {
@@ -106,8 +104,6 @@ public class SelectAction implements Select {
 			
 		} catch (Exception exception) {
 			exception.printStackTrace();
-		} finally {
-			ldapConnection.close();
 		}
 		
 		return listUsers;

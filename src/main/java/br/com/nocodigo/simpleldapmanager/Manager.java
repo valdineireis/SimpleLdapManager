@@ -60,5 +60,17 @@ public interface Manager {
 	 * @throws NamingException
 	 */
 	LdapUser selectByAccountName(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
+	
+	/**
+	 * Reseta a senha do usuário
+	 * @param accountName
+	 * @param password
+	 * @param newPassword
+	 * @throws AuthenticationException
+	 * @throws CommunicationException
+	 * @throws NamingException
+	 * @throws JavaHomePathException
+	 */
+	void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
 
 }

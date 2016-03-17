@@ -29,6 +29,5 @@ public class AuthenticationAction extends AbstractConnection implements Connecti
 		String dn = createDn(model.getCn(), model.getBaseDn());
 		environment = createEnvironment(model, dn);
 		createConnection();
-		close();
 	}
 }
