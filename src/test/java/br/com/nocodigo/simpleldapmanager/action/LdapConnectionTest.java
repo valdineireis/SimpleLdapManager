@@ -2,6 +2,8 @@ package br.com.nocodigo.simpleldapmanager.action;
 
 import static org.junit.Assert.assertNotNull;
 
+import java.util.ResourceBundle;
+
 import javax.naming.AuthenticationException;
 import javax.naming.CommunicationException;
 import javax.naming.NamingException;
@@ -20,10 +22,12 @@ import br.com.nocodigo.simpleldapmanager.model.ConnectionModel;
  */
 public class LdapConnectionTest {
 
-	private static final String HOST = "INFORME O IP OU HOST DO SERVIDOR";
-	private static final String PORTA_PADRAO = "389";
-	private static final String PORTA_SSL = "636";
-	private static final String PASSWORD = "INFORME A SENHA";
+	private static final ResourceBundle CONFIG 	= ResourceBundle.getBundle("test");
+	
+	private static final String HOST 			= CONFIG.getString("ldap.host");
+	private static final String PORTA_PADRAO 	= CONFIG.getString("ldap.port.padrao");
+	private static final String PORTA_SSL 		= CONFIG.getString("ldap.porta.ssl");
+	private static final String PASSWORD 		= CONFIG.getString("ldap.password");
 	
 	private ConnectionModel createModel(
 			String host, 
@@ -38,10 +42,10 @@ public class LdapConnectionTest {
 	}
 
 	private ConnectionModel createBasicModel(String host, String port, String password, boolean useSSL) {
-		String cn 				= "CN=Valdinei Reis da Silva";
-		String ou 				= "OU=Contas de Serviços,OU=TI  Administração";
-		String baseDn 			= "DC=EMPRESA,DC=LOCAL";
-		String connectionType 	= "simple";
+		String cn 				= CONFIG.getString("ldap.cn");
+		String ou 				= CONFIG.getString("ldap.ou");
+		String baseDn 			= CONFIG.getString("ldap.baseDn");
+		String connectionType 	= CONFIG.getString("ldap.connectionType");
 		
 		return createModel(host, port, password, cn, ou, baseDn, connectionType, String.valueOf(useSSL));
 	}
