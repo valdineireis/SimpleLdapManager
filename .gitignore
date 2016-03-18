@@ -5,6 +5,10 @@
 .project
 target/
 
+# Files with the server settings
+src/main/java/ldap.properties
+src/test/java/test.properties
+
 # Mobile Tools for Java (J2ME)
 .mtj.tmp/
 
