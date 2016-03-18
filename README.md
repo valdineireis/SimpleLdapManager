@@ -60,4 +60,7 @@ System.out.println(user.toString());
 
 // Reseta a senha do usuário
 ldapManager.resetPassword(LOGIN, PASSWORD, NEW_PASSWORD);
+
+// Remoção de conta
+ldapManager.deleteAccount(ACCOUNT_NAME);
 ```
