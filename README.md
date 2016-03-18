@@ -47,5 +47,5 @@ LdapUser user = ldapManager.selectByAccountName(LOGIN);
 System.out.println(user.toString());
 
 // Reseta a senha do usuário
-ldapManager.resetPassword(ACCOUNT_NAME, USER_NAME_PASSWORD, NEW_PASSWORD);
+ldapManager.resetPassword(ACCOUNT_NAME, PASSWORD, NEW_PASSWORD);
 ```
