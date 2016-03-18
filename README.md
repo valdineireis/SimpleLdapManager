@@ -14,6 +14,18 @@ Para isso utilize o seguinte comando:
 keytool -import -v -trustcacerts -alias INFORME-UM-APELIDO -file "INFORME-O-CAMINHO-COMPLETO-DO-CERTIFICADO\NOME-DO-ARQUIVO.cer" -keystore "INFORME-O-CAMINHO-COMPLETO-DA-INSTALACAO-DO-JAVA\jre\lib\security\cacerts" -keypass changeit -storepass changeit
 ```
 
+Para listar todos os certificados:
+
+```
+keytool -list -keystore "INFORME-O-CAMINHO-COMPLETO-DA-INSTALACAO-DO-JAVA\jre\lib\security\cacerts"
+```
+
+Para remover o certificado:
+
+```sh
+keytool -delete -alias INFORME-O-APELIDO -keystore "INFORME-O-CAMINHO-COMPLETO-DA-INSTALACAO-DO-JAVA\jre\lib\security\cacerts"
+```
+
 + Para facilitar, existe uma ferramenta chamada [Portecle](http://portecle.sourceforge.net/).
 
 ## Configuração
