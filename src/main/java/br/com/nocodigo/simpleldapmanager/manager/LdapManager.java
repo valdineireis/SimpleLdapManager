@@ -12,6 +12,7 @@ import br.com.nocodigo.simpleldapmanager.Manager;
 import br.com.nocodigo.simpleldapmanager.Select;
 import br.com.nocodigo.simpleldapmanager.action.AuthenticationAction;
 import br.com.nocodigo.simpleldapmanager.action.ConnectionAction;
+import br.com.nocodigo.simpleldapmanager.action.DeleteAccountAction;
 import br.com.nocodigo.simpleldapmanager.action.ResetPasswordAction;
 import br.com.nocodigo.simpleldapmanager.action.SelectAction;
 import br.com.nocodigo.simpleldapmanager.exception.JavaHomePathException;
@@ -90,6 +91,14 @@ public class LdapManager implements Manager {
 		verifyCredentials(accountName, password);
 		LdapUser user = selectByAccountName(accountName);
 		Connection connection = new ResetPasswordAction(newPassword, user.getDistinguishedname());
+		connection.execute(this.model);
+		connection.close();
+	}
+
+	@Override
+	public void deleteAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
+		LdapUser user = selectByAccountName(accountName);
+		Connection connection = new DeleteAccountAction(user.getDistinguishedname());
 		connection.execute(this.model);
 		connection.close();
 	}

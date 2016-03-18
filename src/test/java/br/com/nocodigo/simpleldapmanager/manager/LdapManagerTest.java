@@ -35,6 +35,8 @@ public class LdapManagerTest {
 	private static final String USER_NAME_PASSWORD	= CONFIG.getString("user_name_password");
 	private static final String USER_NAME_NPASSWORD	= CONFIG.getString("user_name_npassword");
 	
+	private static final String NEW_ACCOUNT_NAME	= CONFIG.getString("new_account_name");
+	
 	private Manager ldapManager;
 
 	@Before
@@ -107,6 +109,15 @@ public class LdapManagerTest {
 			ldapManager.resetPassword(USER_NAME_TEST, USER_NAME_PASSWORD, USER_NAME_NPASSWORD);
 		} catch (NamingException | JavaHomePathException e) {
 			fail("Reset Password failure. " + e.getMessage());
+		}
+	}
+	
+	@Test
+	public void deveRemoverUmaConta() {
+		try {
+			ldapManager.deleteAccount(NEW_ACCOUNT_NAME);
+		} catch (NamingException | JavaHomePathException e) {
+			fail("Delete failure. " + e.getMessage());
 		}
 	}
 

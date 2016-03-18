@@ -72,5 +72,15 @@ public interface Manager {
 	 * @throws JavaHomePathException
 	 */
 	void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
+	
+	/**
+	 * Remove a conta do usuário
+	 * @param accountName
+	 * @throws AuthenticationException
+	 * @throws CommunicationException
+	 * @throws NamingException
+	 * @throws JavaHomePathException
+	 */
+	void deleteAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
 
 }
