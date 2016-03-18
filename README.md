@@ -18,7 +18,8 @@ keytool -import -v -trustcacerts -alias INFORME-UM-APELIDO -file "INFORME-O-CAMI
 
 ## Configuração
 
-Edite o arquivo ```ldap.properties``` informando as informações do servidor.
++ Edite o arquivo ```ldap.properties``` informando as informações do servidor.
++ Para manipular as informações (exemplo: reset de senha e ativação de conta), o usuário deve estar no grupo de administradores ou ter permissões equivalentes.
 
 ## Exemplos de código
 
