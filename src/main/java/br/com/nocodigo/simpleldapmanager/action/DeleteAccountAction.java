@@ -18,11 +18,6 @@ import br.com.nocodigo.simpleldapmanager.model.ConnectionModel;
 public class DeleteAccountAction extends AbstractConnection implements Connection {
 
 	private String distinguishedName;
-
-	private String createDn(String cn) {
-		String dn = cn.replaceAll("CN=", "");
-		return dn;
-	}
 	
 	public DeleteAccountAction(String distinguishedName) {
 		this.distinguishedName = distinguishedName;
@@ -32,7 +27,7 @@ public class DeleteAccountAction extends AbstractConnection implements Connectio
 	public void execute(ConnectionModel model)
 			throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
 		
-		String dn = createDn(model.getCn());
+		String dn = this.createDn(model.getCn());
 		this.environment = createEnvironment(model, dn);
 		this.createConnection();
 		

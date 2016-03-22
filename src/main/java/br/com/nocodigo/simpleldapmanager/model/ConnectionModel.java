@@ -15,6 +15,7 @@ public class ConnectionModel {
 	private String ou;
 	private String baseDn;
 	private String connectionType;
+	private String domain;
 	private boolean useSSL;
 	
 	public ConnectionModel(
@@ -25,6 +26,7 @@ public class ConnectionModel {
 			String ou, 
 			String baseDn, 
 			String connectionType,
+			String domain,
 			boolean useSSL) {
 		setHost(host);
 		setPort(port);
@@ -33,6 +35,7 @@ public class ConnectionModel {
 		setOu(ou);
 		setBaseDn(baseDn);
 		setConnectionType(connectionType);
+		setDomain(domain);
 		setUseSSL(useSSL);
 	}
 	
@@ -79,6 +82,12 @@ public class ConnectionModel {
 	}
 	public void setConnectionType(String connectionType) {
 		this.connectionType = connectionType;
+	}
+	public String getDomain() {
+		return domain;
+	}
+	public void setDomain(String domain) {
+		this.domain = domain;
 	}
 	public boolean isUseSSL() {
 		return useSSL;

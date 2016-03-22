@@ -5,7 +5,11 @@ import java.lang.reflect.Field;
 import javax.naming.NamingException;
 import javax.naming.directory.Attribute;
 import javax.naming.directory.Attributes;
+import javax.naming.directory.BasicAttribute;
+import javax.naming.directory.BasicAttributes;
 import javax.naming.directory.SearchResult;
+
+import br.com.nocodigo.simpleldapmanager.Util;
 
 /**
  * Objeto responsável por refletir os atributos dos usuários
@@ -104,6 +108,49 @@ public class LdapUser {
 		}
 	}
 	
+	private Attribute createObjectClass() {
+		Attribute oc = new BasicAttribute("objectClass");
+		oc.add("top");
+		oc.add("person");
+		oc.add("organizationalPerson");
+		oc.add("user");
+		return oc;
+	}
+	
+	public LdapUser() {}
+	
+	public LdapUser(
+			String sAMAccountName,
+			String userPrincipalName,
+			String fullName,
+			String department, 
+			String physicalDeliveryOfficeName, 
+			String description, 
+			String telephoneNumber,
+			String company,
+			String mail,
+			String title) {
+		
+		if (fullName.isEmpty()) {
+			throw new IllegalArgumentException("The fullName field is required.");
+		}
+		
+		setsAMAccountName(sAMAccountName);
+		setUserPrincipalName(userPrincipalName);
+		setCn(fullName);
+		setDisplayName(fullName);
+		setGivenName(Util.fistName(fullName));
+		setSn(Util.fullLastName(fullName));
+		setInitials(Util.extractInitials(fullName));
+		setDepartment(department);
+		setPhysicalDeliveryOfficeName(physicalDeliveryOfficeName);
+		setDescription(description);
+		setTelephoneNumber(telephoneNumber);
+		setCompany(company);
+		setMail(mail);
+		setTitle(title);
+	}
+	
 	@Override
 	public String toString() {
 		StringBuilder result = new StringBuilder();
@@ -138,6 +185,29 @@ public class LdapUser {
 		result.append("}]");
 		
 		return result.toString();
+	}
+	
+	public Attributes createAtributes() throws IllegalArgumentException, IllegalAccessException {
+		Attributes attributes = new BasicAttributes();
+		Class<? extends LdapUser> classe = this.getClass();
+		
+		int totalDeFields = classe.getDeclaredFields().length;
+		
+		for (int i = 0; i < totalDeFields; i++) {
+			Field field = classe.getDeclaredFields()[i];
+			
+			if (field.get(this) != null) {
+				if (isInt(field) && Integer.parseInt(field.get(this).toString()) == 0) {
+					continue;
+				}
+				
+				attributes.put(new BasicAttribute(field.getName(), field.get(this)));
+			}
+		}
+		
+		attributes.put(this.createObjectClass());
+		
+		return attributes;
 	}
 	
 	public LdapUser extractUser(SearchResult searchResult) throws NamingException {

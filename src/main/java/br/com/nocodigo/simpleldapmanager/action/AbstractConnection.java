@@ -1,6 +1,7 @@
 package br.com.nocodigo.simpleldapmanager.action;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
 
 import javax.naming.AuthenticationException;
@@ -76,6 +77,16 @@ public abstract class AbstractConnection {
 	
 	protected void createConnection() throws javax.naming.AuthenticationException, javax.naming.CommunicationException, NamingException {
 		dirContext = new InitialDirContext(environment);
+	}
+	
+	protected String createDn(String cn) {
+		String dn = cn.replaceAll("CN=", "");
+		return dn;
+	}
+	
+	protected byte[] converteStringToByteArray(String password) throws UnsupportedEncodingException {
+	    String newQuotedPassword = "\"" + password + "\"";
+	    return newQuotedPassword.getBytes("UTF-16LE");
 	}
 	
 	public void close() throws NamingException {

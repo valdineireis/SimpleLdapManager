@@ -37,8 +37,9 @@ public class LdapConnectionTest {
 			String ou, 
 			String baseDn, 
 			String connectionType,
+			String domain,
 			String useSSL) {
-		return new ConnectionModel(host, port, password, cn, ou, baseDn, connectionType, Boolean.parseBoolean(useSSL));
+		return new ConnectionModel(host, port, password, cn, ou, baseDn, connectionType, domain, Boolean.parseBoolean(useSSL));
 	}
 
 	private ConnectionModel createBasicModel(String host, String port, String password, boolean useSSL) {
@@ -46,8 +47,9 @@ public class LdapConnectionTest {
 		String ou 				= CONFIG.getString("ldap.ou");
 		String baseDn 			= CONFIG.getString("ldap.baseDn");
 		String connectionType 	= CONFIG.getString("ldap.connectionType");
+		String domain		 	= CONFIG.getString("ldap.domain");
 		
-		return createModel(host, port, password, cn, ou, baseDn, connectionType, String.valueOf(useSSL));
+		return createModel(host, port, password, cn, ou, baseDn, connectionType, domain, String.valueOf(useSSL));
 	}
 
 	private Connection conecta(ConnectionModel model)

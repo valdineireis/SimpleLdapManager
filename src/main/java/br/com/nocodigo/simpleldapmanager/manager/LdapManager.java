@@ -10,6 +10,8 @@ import javax.naming.directory.DirContext;
 import br.com.nocodigo.simpleldapmanager.Connection;
 import br.com.nocodigo.simpleldapmanager.Manager;
 import br.com.nocodigo.simpleldapmanager.Select;
+import br.com.nocodigo.simpleldapmanager.Util;
+import br.com.nocodigo.simpleldapmanager.action.AddNewAccount;
 import br.com.nocodigo.simpleldapmanager.action.AuthenticationAction;
 import br.com.nocodigo.simpleldapmanager.action.ConnectionAction;
 import br.com.nocodigo.simpleldapmanager.action.DeleteAccountAction;
@@ -45,9 +47,10 @@ public class LdapManager implements Manager {
 		String ou 				= CONFIG.getString("ldap.ou");
 		String baseDn 			= CONFIG.getString("ldap.baseDn");
 		String connectionType 	= CONFIG.getString("ldap.connectionType");
+		String domain 			= CONFIG.getString("ldap.domain");
 		String useSSL			= CONFIG.getString("ldap.useSSL");
 		
-		return new ConnectionModel(host, port, password, cn, ou, baseDn, connectionType, Boolean.parseBoolean(useSSL));
+		return new ConnectionModel(host, port, password, cn, ou, baseDn, connectionType, domain, Boolean.parseBoolean(useSSL));
 	}
 	
 	@Override
@@ -99,6 +102,36 @@ public class LdapManager implements Manager {
 	public void deleteAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
 		LdapUser user = selectByAccountName(accountName);
 		Connection connection = new DeleteAccountAction(user.getDistinguishedname());
+		connection.execute(this.model);
+		connection.close();
+	}
+	
+	@Override
+	public void addAccount(
+			String fullName,
+			String department, 
+			String physicalDeliveryOfficeName, 
+			String description, 
+			String telephoneNumber,
+			String company,
+			String title,
+			String password,
+			String organizationalUnitToInsert) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, IllegalArgumentException, IllegalAccessException {
+		
+		if (organizationalUnitToInsert.isEmpty())
+			throw new IllegalArgumentException("The field organizationalUnitToInsert can not be empty");
+		
+		String userPrincipalName_sufixo 	= this.model.getBaseDn().replace("DC=", "").replace(",", ".");
+		
+		String sAMAccountName 				= Util.createUserName(fullName);
+		String mail 						= Util.createString("%s@%s", sAMAccountName, this.model.getDomain());
+		String userPrincipalName 			= Util.createString("%s@%s", sAMAccountName, userPrincipalName_sufixo);
+		String organizationalUnit 			= organizationalUnitToInsert;
+		String domainComponent 				= this.model.getBaseDn();
+		
+		LdapUser ldapUser = new LdapUser(sAMAccountName, userPrincipalName, fullName, department, physicalDeliveryOfficeName, description, telephoneNumber, company, mail, title);
+		Connection connection = new AddNewAccount(ldapUser, password, organizationalUnit, domainComponent);
+		
 		connection.execute(this.model);
 		connection.close();
 	}

@@ -82,5 +82,34 @@ public interface Manager {
 	 * @throws JavaHomePathException
 	 */
 	void deleteAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
+	
+	/**
+	 * Adiciona uma nova conta
+	 * @param fullName
+	 * @param department
+	 * @param physicalDeliveryOfficeName
+	 * @param description
+	 * @param telephoneNumber
+	 * @param company
+	 * @param title
+	 * @param password
+	 * @param organizationalUnitToInsert
+	 * @throws AuthenticationException
+	 * @throws CommunicationException
+	 * @throws NamingException
+	 * @throws JavaHomePathException
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
+	 */
+	public void addAccount(
+			String fullName,
+			String department, 
+			String physicalDeliveryOfficeName, 
+			String description, 
+			String telephoneNumber,
+			String company,
+			String title,
+			String password,
+			String organizationalUnitToInsert) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, IllegalArgumentException, IllegalAccessException;
 
 }

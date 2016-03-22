@@ -25,21 +25,11 @@ public class ResetPasswordAction extends AbstractConnection implements Connectio
 	private String newPassword;
 	private String distinguishedName;
 	
-	private static byte[] converteString(String password) throws UnsupportedEncodingException {
-	    String newQuotedPassword = "\"" + password + "\"";
-	    return newQuotedPassword.getBytes("UTF-16LE");
-	}
-	
 	private void modifyAdAttribute(String userCN, String attribute, Object value) throws NamingException {
 	    ModificationItem[] modificationItem = new ModificationItem[1];
 	    modificationItem[0] = new ModificationItem(DirContext.REPLACE_ATTRIBUTE,
 	            new BasicAttribute(attribute, value));
 	    getDirContext().modifyAttributes(userCN, modificationItem);
-	}
-	
-	private String createDn(String cn) {
-		String dn = cn.replaceAll("CN=", "");
-		return dn;
 	}
 	
 	public ResetPasswordAction(String newPassword, String distinguishedName) {
@@ -51,12 +41,12 @@ public class ResetPasswordAction extends AbstractConnection implements Connectio
 	public void execute(ConnectionModel model)
 			throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
 
-		String dn = createDn(model.getCn());
+		String dn = this.createDn(model.getCn());
 		this.environment = createEnvironment(model, dn);
 		this.createConnection();
 		
 		try {
-			modifyAdAttribute(this.distinguishedName, "unicodePwd", converteString(newPassword));
+			modifyAdAttribute(this.distinguishedName, "unicodePwd", this.converteStringToByteArray(newPassword));
 		} catch (UnsupportedEncodingException e) {
 			throw new CommunicationException(e.getMessage());
 		}
