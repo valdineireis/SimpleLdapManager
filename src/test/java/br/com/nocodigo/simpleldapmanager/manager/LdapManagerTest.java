@@ -148,9 +148,9 @@ public class LdapManagerTest {
 		ldapManager.addAccount("", "SEPLAE", "SEPLAE", "SEPLAE", "99999999", "COMPANY NAME", "Cargo Teste", "", OU_TESTE);
 	}
 	
-	@Test
-	public void deveRestringirOCadastroDeUsuariosComOMesmoNome() {
-		// TODO implementar
+	@Test(expected = java.lang.IllegalArgumentException.class)
+	public void deveRestringirOCadastroDeUsuariosComOMesmoNome() throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException {
+		ldapManager.addAccount(DEFAULT_USER_TEST, "SEPLAE", "SEPLAE", "SEPLAE", "99999999", "COMPANY NAME", "Cargo Teste", "", OU_TESTE);
 	}
 	
 	@Test
