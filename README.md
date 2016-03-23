@@ -61,6 +61,18 @@ System.out.println(user.toString());
 // Reseta a senha do usuário
 ldapManager.resetPassword(LOGIN, PASSWORD, NEW_PASSWORD);
 
+// Adiciona uma nova conta
+ldapManager.addAccount(
+	FULL_NAME, 
+	DEPARTMENT, 
+	PHYSICAL_DELIVERY_OFFICE_NAME, 
+	DESCRIPTION, 
+	TELEPHONE_NUMBER, 
+	COMPANY, 
+	TITLE, 
+	PASSWORD, 
+	ORGANIZATIONAL_UNIT_TO_INSERT);
+
 // Remoção de conta
 ldapManager.deleteAccount(ACCOUNT_NAME);
 ```
