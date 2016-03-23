@@ -126,11 +126,10 @@ public class LdapManager implements Manager {
 		String sAMAccountName 				= Util.createUserName(fullName);
 		String mail 						= Util.createString("%s@%s", sAMAccountName, this.model.getDomain());
 		String userPrincipalName 			= Util.createString("%s@%s", sAMAccountName, userPrincipalName_sufixo);
-		String organizationalUnit 			= organizationalUnitToInsert;
 		String domainComponent 				= this.model.getBaseDn();
 		
 		LdapUser ldapUser = new LdapUser(sAMAccountName, userPrincipalName, fullName, department, physicalDeliveryOfficeName, description, telephoneNumber, company, mail, title);
-		Connection connection = new AddNewAccount(ldapUser, password, organizationalUnit, domainComponent);
+		Connection connection = new AddNewAccount(ldapUser, password, organizationalUnitToInsert, domainComponent);
 		
 		connection.execute(this.model);
 		connection.close();
