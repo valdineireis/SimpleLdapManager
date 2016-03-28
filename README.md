@@ -75,4 +75,10 @@ ldapManager.addAccount(
 
 // Remoção de conta
 ldapManager.deleteAccount(ACCOUNT_NAME);
+
+// Desabilita uma conta
+ldapManager.disableAccount(ACCOUNT_NAME);
+
+// Habilita uma conta
+ldapManager.EnableAccount(ACCOUNT_NAME);
 ```
