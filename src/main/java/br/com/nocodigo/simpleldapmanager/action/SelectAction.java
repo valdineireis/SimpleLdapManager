@@ -77,7 +77,7 @@ public class SelectAction implements Select {
 			user = extractUser(searchResult);
 			
 		} catch (Exception exception) {
-			exception.printStackTrace();
+			System.err.println("WARNING: " + exception.getMessage());
 		}
 		
 		return user;
