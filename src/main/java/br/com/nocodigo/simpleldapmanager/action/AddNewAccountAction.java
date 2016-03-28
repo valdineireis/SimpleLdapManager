@@ -17,7 +17,7 @@ import br.com.nocodigo.simpleldapmanager.model.LdapUser;
  * @since 21/03/2016
  *
  */
-public class AddNewAccount extends AbstractConnection implements Connection {
+public class AddNewAccountAction extends AbstractConnection implements Connection {
 	
 	private Attributes entry = null;
 	private String entryDN;
@@ -39,7 +39,7 @@ public class AddNewAccount extends AbstractConnection implements Connection {
 	 * @throws IllegalAccessException 
 	 * @throws IllegalArgumentException 
 	 */
-	public AddNewAccount(
+	public AddNewAccountAction(
 			LdapUser user,
 			String organizationalUnit,
 			String domainComponent) throws IllegalArgumentException, IllegalAccessException {
