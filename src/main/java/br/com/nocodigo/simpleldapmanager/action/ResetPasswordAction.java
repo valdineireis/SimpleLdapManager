@@ -10,6 +10,7 @@ import javax.naming.directory.DirContext;
 import javax.naming.directory.ModificationItem;
 
 import br.com.nocodigo.simpleldapmanager.Connection;
+import br.com.nocodigo.simpleldapmanager.Util;
 import br.com.nocodigo.simpleldapmanager.exception.JavaHomePathException;
 import br.com.nocodigo.simpleldapmanager.model.ConnectionModel;
 
@@ -46,7 +47,7 @@ public class ResetPasswordAction extends AbstractConnection implements Connectio
 		this.createConnection();
 		
 		try {
-			modifyAdAttribute(this.distinguishedName, "unicodePwd", this.converteStringToByteArray(newPassword));
+			modifyAdAttribute(this.distinguishedName, "unicodePwd", Util.converteStringToByteArray(newPassword));
 		} catch (UnsupportedEncodingException e) {
 			throw new CommunicationException(e.getMessage());
 		}

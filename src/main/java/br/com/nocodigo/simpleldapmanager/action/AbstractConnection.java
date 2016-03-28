@@ -1,7 +1,6 @@
 package br.com.nocodigo.simpleldapmanager.action;
 
 import java.io.File;
-import java.io.UnsupportedEncodingException;
 import java.util.Hashtable;
 
 import javax.naming.AuthenticationException;
