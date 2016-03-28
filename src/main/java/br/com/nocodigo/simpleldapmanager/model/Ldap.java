@@ -24,4 +24,9 @@ public enum Ldap {
 		return this.value;
 	}
 	
+	public static String getEnabledAccountCode() {
+		int codigo = Ldap.UF_NORMAL_ACCOUNT.getValue() + Ldap.UF_PASSWORD_EXPIRED.getValue();
+		return Integer.toString(codigo);
+	}
+	
 }

@@ -70,7 +70,7 @@ public class AddNewAccount extends AbstractConnection implements Connection {
 				new BasicAttribute("unicodePwd", this.converteStringToByteArray(this.password)));
 		modificationItem[1] = new ModificationItem(
 				DirContext.REPLACE_ATTRIBUTE, 
-				new BasicAttribute("userAccountControl", Integer.toString(Ldap.UF_NORMAL_ACCOUNT.getValue() + Ldap.UF_PASSWORD_EXPIRED.getValue())));
+				new BasicAttribute("userAccountControl", Ldap.getEnabledAccountCode() ));
 		
 		this.getDirContext().modifyAttributes(this.entryDN, modificationItem);
 	}
