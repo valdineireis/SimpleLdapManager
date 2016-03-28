@@ -36,6 +36,20 @@ public class LdapManager implements Manager {
 	private static final ResourceBundle CONFIG = ResourceBundle.getBundle("ldap");
 	
 	private ConnectionModel model;
+
+	private void EnableOrDisableAccount(String accountName, String code)
+			throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
+		LdapUser user = selectByAccountName(accountName);
+		
+		Connection connection = new ConnectionAction();
+		connection.execute(this.model);
+		
+		SetAttribute attributes = new SetAttributeAction(connection, user);
+		attributes.add("userAccountControl", code);
+		attributes.apply();
+		
+		connection.close();
+	}
 	
 	public LdapManager() {
 		this.model = createModel();
@@ -152,16 +166,13 @@ public class LdapManager implements Manager {
 
 	@Override
 	public void disableAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
-		LdapUser user = selectByAccountName(accountName);
-		
-		Connection connection = new ConnectionAction();
-		connection.execute(this.model);
-		
-		SetAttribute attributes = new SetAttributeAction(connection, user);
-		attributes.add("userAccountControl", Ldap.getDisableAccountCode());
-		attributes.apply();
-		
-		connection.close();
+		EnableOrDisableAccount(accountName, Ldap.getDisableAccountCode());
+	}
+
+	@Override
+	public void EnableAccount(String accountName)
+			throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
+		EnableOrDisableAccount(accountName, Ldap.getEnabledAccountCode());
 	}
 	
 }

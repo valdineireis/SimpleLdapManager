@@ -124,4 +124,14 @@ public interface Manager {
 	 */
 	void disableAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
 
+	/**
+	 * Habilita uma conta
+	 * @param accountName
+	 * @throws AuthenticationException
+	 * @throws CommunicationException
+	 * @throws NamingException
+	 * @throws JavaHomePathException
+	 */
+	void EnableAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
+
 }

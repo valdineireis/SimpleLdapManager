@@ -209,5 +209,18 @@ public class LdapManagerTest {
 		assertNotNull(user);
 		assertEquals(514, user.getUserAccountControl());
 	}
+	
+	@Test
+	@Order(order=14)
+	public void deveHabilitarUmaConta() throws Exception {
+		String accountName = Util.createUserName(NEW_ACCOUNT_NAME);
+		
+		ldapManager.EnableAccount(accountName);
+		
+		LdapUser user = ldapManager.selectByAccountName(accountName);
+		
+		assertNotNull(user);
+		assertEquals(512, user.getUserAccountControl());
+	}
 
 }
