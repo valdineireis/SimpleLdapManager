@@ -18,7 +18,10 @@ import javax.naming.directory.DirContext;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
+import br.com.nocodigo.helper.Order;
+import br.com.nocodigo.helper.OrderedRunner;
 import br.com.nocodigo.simpleldapmanager.Manager;
 import br.com.nocodigo.simpleldapmanager.Util;
 import br.com.nocodigo.simpleldapmanager.exception.JavaHomePathException;
@@ -28,6 +31,7 @@ import br.com.nocodigo.simpleldapmanager.model.ListUsers;
 /**
  * @author Valdinei Reis (valdinei@nocodigo.com)
  */
+@RunWith(OrderedRunner.class)
 public class LdapManagerTest {
 
 	private static final ResourceBundle CONFIG 	= ResourceBundle.getBundle("test");
@@ -79,16 +83,19 @@ public class LdapManagerTest {
 	}
 
 	@Test
+	@Order(order=1)
 	public void deveCriarOObjetoManager() {
 		assertNotNull(ldapManager);
 	}
 	
 	@Test
+	@Order(order=2)
 	public void deveCriarOModelo() {
 		assertNotNull(ldapManager.createModel());
 	}
 	
 	@Test
+	@Order(order=3)
 	public void deveCriarUmaConexao() throws Exception {
 		DirContext dirContext = ldapManager.createConnection();
 		dirContext.close();
@@ -96,6 +103,7 @@ public class LdapManagerTest {
 	}
 	
 	@Test
+	@Order(order=4)
 	public void deveEfetuarOLogin() {
 		try {
 			ldapManager.verifyCredentials(LOGIN, SENHA);
@@ -105,6 +113,7 @@ public class LdapManagerTest {
 	}
 	
 	@Test
+	@Order(order=5)
 	public void deveListarTodosUsuariosByOu() throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
 		ListUsers users = ldapManager.selectAllByOu(OU_DEPARTAMENTO);
 		
@@ -119,6 +128,7 @@ public class LdapManagerTest {
 	}
 	
 	@Test
+	@Order(order=6)
 	public void deveBuscarUmUsuarioByAccountName() throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
 		LdapUser user = ldapManager.selectByAccountName(LOGIN);
 		
@@ -131,6 +141,7 @@ public class LdapManagerTest {
 	}
 	
 	@Test
+	@Order(order=7)
 	public void deveBuscarUmUsuarioHabilitado() throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
 		LdapUser user = ldapManager.selectByAccountName(LOGIN);
 		String accountControl = String.valueOf(user.getUserAccountControl());
@@ -139,6 +150,7 @@ public class LdapManagerTest {
 	}
 	
 	@Test
+	@Order(order=8)
 	public void deveResetarASenha() {
 		try {
 			ldapManager.resetPassword(USER_NAME_TEST, USER_NAME_PASSWORD, USER_NAME_NPASSWORD);
@@ -148,6 +160,7 @@ public class LdapManagerTest {
 	}
 	
 	@Test
+	@Order(order=9)
 	public void deveAdicionarUmaNovaConta() {
 		try {
 			addAccount(ldapManager, NEW_ACCOUNT_NAME);
@@ -163,16 +176,19 @@ public class LdapManagerTest {
 	}
 
 	@Test(expected = java.lang.IllegalArgumentException.class)
+	@Order(order=10)
 	public void deveRequererONomeEASenha() throws Exception {
 		addAccount(ldapManager, "", "");
 	}
 	
 	@Test(expected = javax.naming.NameAlreadyBoundException.class)
+	@Order(order=11)
 	public void deveRestringirOCadastroDeUsuariosComOMesmoNome() throws Exception {
 		addAccount(ldapManager, DEFAULT_USER_TEST);
 	}
 	
 	@Test
+	@Order(order=12)
 	public void deveRemoverUmaConta() {
 		try {
 			ldapManager.deleteAccount( Util.createUserName(DEFAULT_USER_TEST));
@@ -182,6 +198,7 @@ public class LdapManagerTest {
 	}
 	
 	@Test
+	@Order(order=13)
 	public void deveDesabilitarUmaConta() throws Exception {
 		String accountName = Util.createUserName(NEW_ACCOUNT_NAME);
 		
