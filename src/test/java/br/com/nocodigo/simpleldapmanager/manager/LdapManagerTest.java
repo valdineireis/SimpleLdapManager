@@ -5,6 +5,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -50,18 +51,22 @@ public class LdapManagerTest {
 	
 	private static Manager ldapManager;
 	
-	private static void addAccount(Manager manager, String accountName, String senha) throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException {
+	private static void addAccount(Manager manager, String accountName, String senha) throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException, UnsupportedEncodingException {
 		manager.addAccount(accountName, "SEPLAE", "SEPLAE", "SEPLAE", "99999999", "PREFEITURA MUNICIPAL", "Cargo Teste", senha, OU_TESTE);
 	}
 	
-	private static void addAccount(Manager manager, String accountName) throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException {
+	private static void addAccount(Manager manager, String accountName) throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException, UnsupportedEncodingException {
 		addAccount(manager, accountName, "minha@senha");
 	}
 	
 	@BeforeClass
 	public static void start() throws Exception {
 		ldapManager = new LdapManager();
-		addAccount(ldapManager, DEFAULT_USER_TEST);
+		LdapUser user = ldapManager.selectByAccountName(Util.createUserName(DEFAULT_USER_TEST));
+		
+		if (user == null) {
+			addAccount(ldapManager, DEFAULT_USER_TEST);
+		}
 	}
 	
 	@AfterClass
@@ -137,7 +142,7 @@ public class LdapManagerTest {
 	public void deveResetarASenha() {
 		try {
 			ldapManager.resetPassword(USER_NAME_TEST, USER_NAME_PASSWORD, USER_NAME_NPASSWORD);
-		} catch (NamingException | JavaHomePathException e) {
+		} catch (NamingException | JavaHomePathException | UnsupportedEncodingException e) {
 			fail("Reset Password failure. " + e.getMessage());
 		}
 	}
@@ -146,18 +151,24 @@ public class LdapManagerTest {
 	public void deveAdicionarUmaNovaConta() {
 		try {
 			addAccount(ldapManager, NEW_ACCOUNT_NAME);
-		} catch (NamingException | JavaHomePathException | IllegalArgumentException | IllegalAccessException e) {
+			
+			LdapUser user = ldapManager.selectByAccountName(Util.createUserName(NEW_ACCOUNT_NAME));
+			
+			assertNotNull(user);
+			assertEquals(512, user.getUserAccountControl());
+			
+		} catch (Exception e) {
 			fail("Add failure. " + e.getMessage());
 		}
 	}
 
 	@Test(expected = java.lang.IllegalArgumentException.class)
-	public void deveRequererONomeEASenha() throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, IllegalArgumentException, IllegalAccessException {
+	public void deveRequererONomeEASenha() throws Exception {
 		addAccount(ldapManager, "", "");
 	}
 	
 	@Test(expected = javax.naming.NameAlreadyBoundException.class)
-	public void deveRestringirOCadastroDeUsuariosComOMesmoNome() throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException {
+	public void deveRestringirOCadastroDeUsuariosComOMesmoNome() throws Exception {
 		addAccount(ldapManager, DEFAULT_USER_TEST);
 	}
 	
@@ -168,6 +179,18 @@ public class LdapManagerTest {
 		} catch (NamingException | JavaHomePathException e) {
 			fail("Delete failure. " + e.getMessage());
 		}
+	}
+	
+	@Test
+	public void deveDesabilitarUmaConta() throws Exception {
+		String accountName = Util.createUserName(NEW_ACCOUNT_NAME);
+		
+		ldapManager.disableAccount(accountName);
+		
+		LdapUser user = ldapManager.selectByAccountName(accountName);
+		
+		assertNotNull(user);
+		assertEquals(514, user.getUserAccountControl());
 	}
 
 }

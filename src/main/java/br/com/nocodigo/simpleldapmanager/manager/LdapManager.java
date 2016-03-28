@@ -1,5 +1,6 @@
 package br.com.nocodigo.simpleldapmanager.manager;
 
+import java.io.UnsupportedEncodingException;
 import java.util.ResourceBundle;
 
 import javax.naming.AuthenticationException;
@@ -10,15 +11,17 @@ import javax.naming.directory.DirContext;
 import br.com.nocodigo.simpleldapmanager.Connection;
 import br.com.nocodigo.simpleldapmanager.Manager;
 import br.com.nocodigo.simpleldapmanager.Select;
+import br.com.nocodigo.simpleldapmanager.SetAttribute;
 import br.com.nocodigo.simpleldapmanager.Util;
-import br.com.nocodigo.simpleldapmanager.action.AddNewAccount;
+import br.com.nocodigo.simpleldapmanager.action.AddNewAccountAction;
 import br.com.nocodigo.simpleldapmanager.action.AuthenticationAction;
 import br.com.nocodigo.simpleldapmanager.action.ConnectionAction;
 import br.com.nocodigo.simpleldapmanager.action.DeleteAccountAction;
-import br.com.nocodigo.simpleldapmanager.action.ResetPasswordAction;
 import br.com.nocodigo.simpleldapmanager.action.SelectAction;
+import br.com.nocodigo.simpleldapmanager.action.SetAttributeAction;
 import br.com.nocodigo.simpleldapmanager.exception.JavaHomePathException;
 import br.com.nocodigo.simpleldapmanager.model.ConnectionModel;
+import br.com.nocodigo.simpleldapmanager.model.Ldap;
 import br.com.nocodigo.simpleldapmanager.model.LdapUser;
 import br.com.nocodigo.simpleldapmanager.model.ListUsers;
 
@@ -90,11 +93,17 @@ public class LdapManager implements Manager {
 	}
 	
 	@Override
-	public void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
+	public void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException {
 		verifyCredentials(accountName, password);
 		LdapUser user = selectByAccountName(accountName);
-		Connection connection = new ResetPasswordAction(newPassword, user.getDistinguishedname());
+		
+		Connection connection = new ConnectionAction();
 		connection.execute(this.model);
+		
+		SetAttribute attributes = new SetAttributeAction(connection, user);
+		attributes.add("unicodePwd", Util.converteStringToByteArray(newPassword));
+		attributes.apply();
+		
 		connection.close();
 	}
 
@@ -116,10 +125,10 @@ public class LdapManager implements Manager {
 			String company,
 			String title,
 			String password,
-			String organizationalUnitToInsert) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, IllegalArgumentException, IllegalAccessException {
+			String organizationalUnitToInsert) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, IllegalArgumentException, IllegalAccessException, UnsupportedEncodingException {
 		
-		if (organizationalUnitToInsert.isEmpty())
-			throw new IllegalArgumentException("The field organizationalUnitToInsert can not be empty");
+		if (password.isEmpty() || organizationalUnitToInsert.isEmpty())
+			throw new IllegalArgumentException("The fields password and organizationalUnitToInsert can not be empty");
 		
 		String userPrincipalName_sufixo 	= this.model.getBaseDn().replace("DC=", "").replace(",", ".");
 		
@@ -129,9 +138,29 @@ public class LdapManager implements Manager {
 		String domainComponent 				= this.model.getBaseDn();
 		
 		LdapUser ldapUser = new LdapUser(sAMAccountName, userPrincipalName, fullName, department, physicalDeliveryOfficeName, description, telephoneNumber, company, mail, title);
-		Connection connection = new AddNewAccount(ldapUser, password, organizationalUnitToInsert, domainComponent);
 		
+		Connection connection = new AddNewAccountAction(ldapUser, organizationalUnitToInsert, domainComponent);
 		connection.execute(this.model);
+		
+		SetAttribute attributes = new SetAttributeAction(connection, ldapUser, organizationalUnitToInsert, domainComponent);
+		attributes.add("unicodePwd", Util.converteStringToByteArray(password));
+		attributes.add("userAccountControl", Ldap.getEnabledAccountCode());
+		attributes.apply();
+		
+		connection.close();
+	}
+
+	@Override
+	public void disableAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException {
+		LdapUser user = selectByAccountName(accountName);
+		
+		Connection connection = new ConnectionAction();
+		connection.execute(this.model);
+		
+		SetAttribute attributes = new SetAttributeAction(connection, user);
+		attributes.add("userAccountControl", Ldap.getDisableAccountCode());
+		attributes.apply();
+		
 		connection.close();
 	}
 	

@@ -1,5 +1,7 @@
 package br.com.nocodigo.simpleldapmanager;
 
+import java.io.UnsupportedEncodingException;
+
 import javax.naming.AuthenticationException;
 import javax.naming.CommunicationException;
 import javax.naming.NamingException;
@@ -71,7 +73,7 @@ public interface Manager {
 	 * @throws NamingException
 	 * @throws JavaHomePathException
 	 */
-	void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
+	void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException;
 	
 	/**
 	 * Remove a conta do usuário
@@ -101,7 +103,7 @@ public interface Manager {
 	 * @throws IllegalArgumentException
 	 * @throws IllegalAccessException
 	 */
-	public void addAccount(
+	void addAccount(
 			String fullName,
 			String department, 
 			String physicalDeliveryOfficeName, 
@@ -110,6 +112,16 @@ public interface Manager {
 			String company,
 			String title,
 			String password,
-			String organizationalUnitToInsert) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, IllegalArgumentException, IllegalAccessException;
+			String organizationalUnitToInsert) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, IllegalArgumentException, IllegalAccessException, UnsupportedEncodingException;
+
+	/**
+	 * Desabilita uma conta
+	 * @param accountName
+	 * @throws AuthenticationException
+	 * @throws CommunicationException
+	 * @throws NamingException
+	 * @throws JavaHomePathException
+	 */
+	void disableAccount(String accountName) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException;
 
 }
