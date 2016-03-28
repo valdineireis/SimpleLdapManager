@@ -1,5 +1,6 @@
 package br.com.nocodigo.simpleldapmanager;
 
+import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.List;
 
@@ -46,5 +47,10 @@ public class Util {
 				iniciais += nome.charAt(0);
 		}
 		return iniciais;
+	}
+	
+	public static byte[] converteStringToByteArray(String password) throws UnsupportedEncodingException {
+	    String newQuotedPassword = "\"" + password + "\"";
+	    return newQuotedPassword.getBytes("UTF-16LE");
 	}
 }
