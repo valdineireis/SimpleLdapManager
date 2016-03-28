@@ -50,10 +50,18 @@ public class LdapManagerTest {
 	
 	private static Manager ldapManager;
 	
+	private static void addAccount(Manager manager, String accountName, String senha) throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException {
+		manager.addAccount(accountName, "SEPLAE", "SEPLAE", "SEPLAE", "99999999", "PREFEITURA MUNICIPAL", "Cargo Teste", senha, OU_TESTE);
+	}
+	
+	private static void addAccount(Manager manager, String accountName) throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException {
+		addAccount(manager, accountName, "minha@senha");
+	}
+	
 	@BeforeClass
 	public static void start() throws Exception {
 		ldapManager = new LdapManager();
-		ldapManager.addAccount(DEFAULT_USER_TEST, "SEPLAE", "SEPLAE", "SEPLAE", "99999999", "PREFEITURA MUNICIPAL", "Cargo Teste", "minha@senha", OU_TESTE);
+		addAccount(ldapManager, DEFAULT_USER_TEST);
 	}
 	
 	@AfterClass
@@ -137,7 +145,7 @@ public class LdapManagerTest {
 	@Test
 	public void deveAdicionarUmaNovaConta() {
 		try {
-			ldapManager.addAccount(NEW_ACCOUNT_NAME, "SEPLAE", "SEPLAE", "SEPLAE", "99999999", "COMPANY NAME", "Cargo Teste", "minha@senha", OU_TESTE);
+			addAccount(ldapManager, NEW_ACCOUNT_NAME);
 		} catch (NamingException | JavaHomePathException | IllegalArgumentException | IllegalAccessException e) {
 			fail("Add failure. " + e.getMessage());
 		}
@@ -145,12 +153,12 @@ public class LdapManagerTest {
 
 	@Test(expected = java.lang.IllegalArgumentException.class)
 	public void deveRequererONomeEASenha() throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, IllegalArgumentException, IllegalAccessException {
-		ldapManager.addAccount("", "SEPLAE", "SEPLAE", "SEPLAE", "99999999", "COMPANY NAME", "Cargo Teste", "", OU_TESTE);
+		addAccount(ldapManager, "", "");
 	}
 	
-	@Test(expected = java.lang.IllegalArgumentException.class)
+	@Test(expected = javax.naming.NameAlreadyBoundException.class)
 	public void deveRestringirOCadastroDeUsuariosComOMesmoNome() throws AuthenticationException, CommunicationException, IllegalArgumentException, IllegalAccessException, NamingException, JavaHomePathException {
-		ldapManager.addAccount(DEFAULT_USER_TEST, "SEPLAE", "SEPLAE", "SEPLAE", "99999999", "COMPANY NAME", "Cargo Teste", "", OU_TESTE);
+		addAccount(ldapManager, DEFAULT_USER_TEST);
 	}
 	
 	@Test
