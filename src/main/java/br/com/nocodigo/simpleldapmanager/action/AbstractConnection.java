@@ -84,11 +84,6 @@ public abstract class AbstractConnection {
 		return dn;
 	}
 	
-	protected byte[] converteStringToByteArray(String password) throws UnsupportedEncodingException {
-	    String newQuotedPassword = "\"" + password + "\"";
-	    return newQuotedPassword.getBytes("UTF-16LE");
-	}
-	
 	public void close() throws NamingException {
 		if (dirContext != null) {
 			dirContext.close();
