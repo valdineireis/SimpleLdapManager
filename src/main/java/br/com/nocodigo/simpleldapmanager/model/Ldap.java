@@ -29,4 +29,9 @@ public enum Ldap {
 		return Integer.toString(codigo);
 	}
 	
+	public static String getDisableAccountCode() {
+		int codigo = Ldap.UF_NORMAL_ACCOUNT.getValue() + Ldap.UF_ACCOUNTDISABLE.getValue();
+		return Integer.toString(codigo);
+	}
+	
 }
