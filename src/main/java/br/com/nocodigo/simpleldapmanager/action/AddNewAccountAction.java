@@ -23,21 +23,11 @@ public class AddNewAccountAction extends AbstractConnection implements Connectio
 	private String entryDN;
 	
 	/**
-	 * 
-	 * @param sAMAccountName primeiroNome.ultimoNome
-	 * @param userPrincipalName sAMAccountName@domainComponent
-	 * @param fullName nome completo
-	 * @param department
-	 * @param physicalDeliveryOfficeName
-	 * @param description
-	 * @param telephoneNumber
-	 * @param company
-	 * @param mail
-	 * @param title
+	 * @param user
 	 * @param organizationalUnit
 	 * @param domainComponent
-	 * @throws IllegalAccessException 
-	 * @throws IllegalArgumentException 
+	 * @throws IllegalArgumentException
+	 * @throws IllegalAccessException
 	 */
 	public AddNewAccountAction(
 			LdapUser user,
