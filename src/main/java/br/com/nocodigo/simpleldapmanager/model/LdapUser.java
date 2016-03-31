@@ -178,7 +178,7 @@ public class LdapUser {
 					result.append(",");
 				
 			} catch (IllegalArgumentException | IllegalAccessException e) {
-				e.printStackTrace();
+				System.err.println("INFO: " + e.getMessage());
 			}
 		}
 		
