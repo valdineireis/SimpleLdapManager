@@ -106,7 +106,16 @@ public class LdapManager implements Manager {
 		return user;
 	}
 	
-	@Override
+	/**
+	 * Reseta a senha do usuário
+	 * @param accountName
+	 * @param password
+	 * @param newPassword
+	 * @throws AuthenticationException
+	 * @throws CommunicationException
+	 * @throws NamingException
+	 * @throws JavaHomePathException
+	 */
 	public void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException {
 		verifyCredentials(accountName, password);
 		LdapUser user = selectByAccountName(accountName);
