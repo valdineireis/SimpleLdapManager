@@ -153,9 +153,20 @@ public class LdapManagerTest {
 	@Order(order=8)
 	public void deveResetarASenha() {
 		try {
-			ldapManager.resetPassword(USER_NAME_TEST, USER_NAME_PASSWORD, USER_NAME_NPASSWORD);
+			ldapManager.resetPassword(USER_NAME_TEST, USER_NAME_NPASSWORD);
 		} catch (NamingException | JavaHomePathException | UnsupportedEncodingException e) {
 			fail("Reset Password failure. " + e.getMessage());
+		}
+	}
+	
+	@Test
+	@Order(order=8)
+	public void deveAtualizarASenha() {
+		try {
+			ldapManager.updatePassword(USER_NAME_TEST, USER_NAME_PASSWORD, USER_NAME_NPASSWORD);
+			ldapManager.verifyCredentials(USER_NAME_TEST, USER_NAME_NPASSWORD);
+		} catch (NamingException | JavaHomePathException | UnsupportedEncodingException e) {
+			fail("Update Password failure. " + e.getMessage());
 		}
 	}
 	

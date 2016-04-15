@@ -116,7 +116,20 @@ public class LdapManager implements Manager {
 	 * @throws NamingException
 	 * @throws JavaHomePathException
 	 */
-	public void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException {
+	public void resetPassword(String accountName, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException {
+		LdapUser user = selectByAccountName(accountName);
+		
+		Connection connection = new ConnectionAction();
+		connection.execute(this.model);
+		
+		SetAttribute attributes = new SetAttributeAction(connection, user);
+		attributes.add("unicodePwd", Util.converteStringToByteArray(newPassword));
+		attributes.apply();
+		
+		connection.close();
+	}
+	
+	public void updatePassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException {
 		verifyCredentials(accountName, password);
 		LdapUser user = selectByAccountName(accountName);
 		

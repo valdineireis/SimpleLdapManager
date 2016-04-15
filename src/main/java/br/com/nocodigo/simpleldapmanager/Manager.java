@@ -73,7 +73,20 @@ public interface Manager {
 	 * @throws NamingException
 	 * @throws JavaHomePathException
 	 */
-	void resetPassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException;
+	void resetPassword(String accountName, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException;
+	
+	/**
+	 * Atualiza a senha do usuário
+	 * @param accountName
+	 * @param password
+	 * @param newPassword
+	 * @throws AuthenticationException
+	 * @throws CommunicationException
+	 * @throws NamingException
+	 * @throws JavaHomePathException
+	 * @throws UnsupportedEncodingException
+	 */
+	void updatePassword(String accountName, String password, String newPassword) throws AuthenticationException, CommunicationException, NamingException, JavaHomePathException, UnsupportedEncodingException;
 	
 	/**
 	 * Remove a conta do usuário
