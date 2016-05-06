@@ -55,6 +55,19 @@ public class LdapManager implements Manager {
 		this.model = createModel();
 	}
 	
+	public LdapManager(
+			String host,
+			String port,
+			String password,
+			String cn,
+			String ou,
+			String baseDn,
+			String connectionType,
+			String domain,
+			String useSSL) {
+		this.model = new ConnectionModel(host, port, password, cn, ou, baseDn, connectionType, domain, Boolean.parseBoolean(useSSL));
+	}
+	
 	@Override
 	public ConnectionModel createModel() {
 		String host 			= CONFIG.getString("ldap.host");
