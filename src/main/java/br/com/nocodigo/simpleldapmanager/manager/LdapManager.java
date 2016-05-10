@@ -137,6 +137,7 @@ public class LdapManager implements Manager {
 		
 		SetAttribute attributes = new SetAttributeAction(connection, user);
 		attributes.add("unicodePwd", Util.converteStringToByteArray(newPassword));
+		attributes.add("lockoutTime", "0");
 		attributes.apply();
 		
 		connection.close();
@@ -151,6 +152,7 @@ public class LdapManager implements Manager {
 		
 		SetAttribute attributes = new SetAttributeAction(connection, user);
 		attributes.add("unicodePwd", Util.converteStringToByteArray(newPassword));
+		attributes.add("lockoutTime", "0");
 		attributes.apply();
 		
 		connection.close();

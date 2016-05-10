@@ -43,6 +43,7 @@ public class LdapUser {
 	private String description;
 	private String telephoneNumber;
 	private int userAccountControl;
+	private String lockoutTime;
 	
 	private String mailNickName;
 	private String memberOf;
@@ -357,6 +358,12 @@ public class LdapUser {
 	}
 	public void setUserAccountControl(int userAccountControl) {
 		this.userAccountControl = userAccountControl;
+	}
+	public String getLockoutTime() {
+		return lockoutTime;
+	}
+	public void setLockoutTime(String lockoutTime) {
+		this.lockoutTime = lockoutTime;
 	}
 
 	public String getMailNickName() {
